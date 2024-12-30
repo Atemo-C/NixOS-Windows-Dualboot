@@ -1,0 +1,347 @@
+<!DOCTYPE HTML>
+
+<!-- HTML written by hand, because why not? (I have no idea what I'm doing) !-->
+<!-- Written by Atemo Cayaku. !-->
+
+<meta name = "viewport" >
+<meta content = "width = device-width, initial-scale = 1">
+
+<title> Installing NixOS alongside Windows </title>
+
+<style>
+	body {
+		background-color: #111111;
+		color: #ffffff;
+		line-height: 1.4;
+		max-width: 74rem;
+		margin: auto;
+	}
+
+	ol { li { margin-bottom: .5em; } }
+
+	ul { li { margin-bottom: .2em; } }
+
+	hr { color: #555555; }
+
+	h1 { color: #00c0ff; }
+
+	h2 { color: #00ffc0; }
+
+	pre {
+		color: #ff00c0;
+		font-size: 12pt;
+		margin: 3px;
+	}
+</style>
+
+<p> <sub> <i> <b> Last updated on the 30th of December, 2024. </b> </i> </sub> </p>
+
+<h1> Introduction. </h1>
+
+<p> Greetings. In this guide, I will show you one of the few ways to install NixOS graphically alongside an existing EFI installation of Windows 10 or Windows 11, on the same storage device. </p>
+<p> Whilst it is not someting I would usually recommend doing since there are better ways to install different operating systems on one's computer, some people may simply not have a choice, or may find this to be more convenient. And, after having helped a few people with thtis exact thing, I feel it is a good opportunity to share this knowledge and help others. </p>
+<p> This guide is very step-by-step, and includes images for every important step as well. Feel free to read it multiple times over if needed, and if you can, try it out on a virtual machine before doing it on actual hardware. </p>
+
+<hr>
+
+<h2> Assumptions. </h2>
+
+<p> Here are some assumptions made for this guide: </p>
+
+<ul>
+	<li> Your computer boots in <b>EFI mode</b>. </li>
+	<li> Your comupter has a <b>64-bit x86_64</b> CPU architecture.</li>
+	<li> Windows <b>10</b> <i>or</i> <b>11</b> is already installed and working. </li>
+	<li> Disk partitioning has not already been changed outside of Windows' defaults. </li>
+	<li> Windows is the <b>only</b> operating system installed on your computer. </li>
+	<li> There is enough storage space for <b>both</b> Windows and NixOS to live comfortably. </li>
+	<li> You have <b>backups</b> of everything you need; Be it your personal data, or your Windows installation. </li>
+	<li> You have previous experience with installing a Linux distribution, and know how to re-install Windows if necessary. </li>
+	<li> You have an <b>up-to-date</b> NixOS installation medium, and a Windows one if necessary. </li>
+	<li> Said installation medium of NixOS is a graphical one <i>(<a href="https://channels.nixos.org/nixos-24.11/latest-nixos-gnome-x86_64-linux.iso"><span style="color: #00c0ff;">GNOME</span></a> or <a href="https://channels.nixos.org/nixos-24.11/latest-nixos-plasma6-x86_64-linux.iso"><span style="color: #00c0ff;">KDE Plasma</span></a>)</i>. </li>
+	<li> You know how to boot into said installation medium. </li>
+	<li> You will install NixOS with a graphical desktop environments. </li>
+	<li> Things could go wrong, and you are fully prepared for that possiblity. </li>
+</ul>
+
+<p> With that aside, we can now begin. </p>
+
+<hr> <hr>
+
+<h1> [1] Creating an empty partition for NixOS. </h1>
+
+<h2> [1.1] Opening Disk Management. </h2>
+<p> Turn your computer on, and boot into Windows. Once you have logged into the desktop, open the search menu, and search for "partition". The following program should be displayed, start it: </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Partition-search.webp">
+
+<p> If you cannot find it here, you can find it in the <b>Control Panel</b> like so: </p>
+
+<ol>
+	<li>Open the <b>Control Panel</b> <i>(control.exe).</i></li>
+	<li>Click on "<b><span style = "color: #00ff00">System and Security</span></b>". </li>
+	<li>Scroll down to "<b><span style = "color: #00ff00">Administrative Tools</span></b>". </li>
+	<li>Click on "<b><span style = "color: #00c0ff">Create and format hard disk partitions</span></b>". </li>
+</ol>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Control-panel_1.webp">
+<p />
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Control-panel_2.webp">
+
+<p> You should now have this window opened: </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Disk-management_1.webp">
+
+<p> Here, we can see a normal Windows partitioning layout, with: </p>
+
+<ul>
+	<li>The <b>EFI System partition</b> of <b>100MB</b> <i>(this will be important later</i>). </li>
+	<li>The main <b>NTFS partition</b> <i>(this is our focus for now</i>). </li>
+	<li>The <b>Windows Recovery partition</b> <i>(we will not touch this).</i> </li>
+</ul>
+
+<hr>
+
+<h2> [1.2] Shrinking the NTFS partition. </h2>
+
+<p> We must now <b>shrink</b> the main NTFS partition to give enough space for NixOS. </p>
+<p> Here is how we will achieve this: </p>
+
+<ol>
+	<li>Right-click on the main NTFS partition. </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Disk-management_2.webp">
+	<p />
+	<li>Click on "<b>Shrink Volume…</b>"; This window should appear: </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Disk-management_3.webp">
+	<p />
+	<li>In "<b>Enter the amount of space to shrink in MB</b>", do so. Select an amount that will leave enough space for a NixOS installation, but also enough for Windows to keep working normally. In this case, I chose half of the total size.</li>
+	<li>Click on "<b>Shrink</b>". You should now have a black-bannered unallocated partition, ready for NixOS to be installed in. </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Disk-management_4.webp">
+	<p />
+</ol>
+
+<hr>
+
+<p> We are done with this part. Do not turn off your computer yet. </p>
+
+<hr> <hr>
+
+<h1> [2] Installing NixOS. </h1>
+
+<h2> [2.1] Booting into NixOS. </h2>
+
+<p> To boot into NixOS and stop Windows from interfering with further partition changes, we will need not to shut down the computer, but restart it. <p>
+<p> To do so, insert the NixOS installation medium into your computer, then restart it. Once the NixOS boot menu appears, press <b>Enter</b> at the default selection, which should be "<b><span style = "color: #00c0ff">&nbsp NixOS [version] Installer</span></b>", as seen here: </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/First-boot.webp">
+
+<p> The system will now boot. A few seconds after the desktop has started, the installer program should automatically start. </p>
+<p> Before proceeding to the intsallation, your computer will need to be connected to a stable network and have a stable power source. You may or may not have to re-start the installer program, <b>Calamares</b>, if some changed settings are not automatically detected after the automatic 5-seconds refresh on failed elements. </p>
+<p> Once this is done, the installer window will look like this, prompting you to select the language you wish to proceed with: </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_1.webp">
+
+<p> From here on until the "<b><span style = "color:#00c0ff;">Partitions</span></b>" portion of the installer, steps are mostly similar to most other Linux desktop installers. For those who are sure to be familiar with it and NixOS' unique features in it, you may skip to "<b><span style = "color: #00ffc0;">[2.3] NixOS partitioning and installation.</span></b>" of this guide. For the rest of you, follow along. </p>
+
+<hr>
+
+<h2> [2.2] NixOS installer. </h2>
+
+<p> Let us go through the NixOS installer, up to "<b><span style = "color:#00c0ff;">Partitions</span></b>": </p>
+
+<ol>
+	<li> <span style = "color: #00c0ff"> [ Welcome ]</span> | As seen in the previous image, select the desired language, and click "<b>Next</b>". </li>
+	<p />
+	<li> <span style = "color: #00c0ff"> [ Location ]</span> | Select the desired region and time zone. If desired, you may as well individually change the language and locales here too. Once done, click "<b>Next</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_2.webp">
+	<p />
+	<li> <span style = "color: #00c0ff"> [ Users ]</span> | Select a user name and password, as well as a root (admin) account password, then click "<b>Next</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_3.webp">
+	<p />
+	<li> <span style = "color: #00c0ff"> [ Desktop ]</span> | Select a graphical desktop to install, then click "<b>Next</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_4.webp">
+	<p />
+	<li> <span style = "color: #00c0ff"> [ Unfree Software ]</span> | Select whether to allow proprietary software to be installed. The text provided by the installer does a good job at explaining what it means. Once you have made your choice, click "<b>Next</b>"</li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_5.webp">
+	<p />
+</ol>
+
+<hr>
+
+<h2> [2.3] NixOS partitioning and installation.</h2>
+
+<p> You should now see this screen, which shows the partition layout, just as it was when we last modified it on Windows: </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_6.webp">
+
+<p> We can now proceed to the partitioning. </p>
+
+<ol>
+	<li> We are presented multiple choices. For this guide, we will choose the "<b>Manual partitioning</b>" option. Select it, then click "<b>Next</b>". After we clicked it, we are shown the entire partitioning table. This is where we will asign partitions for the installation of NixOS. </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_7.webp">
+	<p />
+	<li> Click on the "<b>FAT32</b>" partition of 100MiB, then click "<b>Edit</b>". A new window will appear. </li>
+	<li> In "<b>Mount Point</b>", select <b>/boot</b>, it should look like this: </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_8.webp">
+	<p />
+	<li> Click on "<b>OK</b>" once you have verified your actions. </li>
+	<li> Click on the largest "<b>Free Space"</b>, then click "<b>Create"</b>. A new window will appear. </li>
+	<li> In "<b>Size</b>", put the amount, in MiB, of swap we want to give NixOS. In my case, I will go with 4 GiB <i>(4096 MiB)</i>. </li>
+	<li> In "<b>File System</b>", select "<b>linuxswap</b>".</li>
+	<li> In "<b>FS Label</b>", you may name the swap partition for NixOS. In my case, I will name it "nixos-swap". Once you have completed these steps, the window should look like this:</li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_9.webp">
+	<p />
+	<li> Click on "<b>OK</b>" once you have verified your actions. A small red partition should now appear, showing the successful addition of the swap partition. </li>
+	<li> Click once again on the largest "<b>Free Space"</b>, then click "<b>Create"</b>. A new window will appear. </li>
+	<li> You may wish to change the file system from ext4 to something else if you wish, but in this case, I will stay with ext4. </li>
+	<li> In "<b>Mount Point</b>", select <b>/</b>. </li>
+	<li> In "<b>FS Label</b>", you may name the main storage partition for NixOS. In my case, I will name it "nixos". Once you have completed these steps, the window should look like this:</li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_10.webp">
+	<p />
+	<li> Click on "<b>OK</b>" once you have verified your actions. You should now have a completed partition table, like so: </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_11.webp">
+	<p />
+	<li> Click on "<b>Next</b>". The following warning should show up, indicating that the boot partition of 100 MiB is too small. We will fix this after the installation. </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_12.webp">
+	<p />
+	<li> Click on "<b>OK</b>", then review your choices on this screen: </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_13.webp">
+	<p />
+	<li> Once you are absolutely sure that everything is in check, you may finally click "<b>Install</b>" There is NO going back from here on out. <i> Note: If the installer looks stuck at <b>46%</b>, this is perfectly normal. This step simply takes the longest out of the entire installation process. </i> </li>
+</ol>
+
+<p> Once the installation has finished, you should show this screen. </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/NixOS-installer_14.webp">
+
+<p> You may now power off the computer and remove the NixOS installation medium from it. </p>
+
+<hr> <hr>
+
+<h1> [3] Making the boot partition larger. </h1>
+
+<h2> [3.1] First boot. </h2>
+
+<p> You can now boot your computer. Assuming your UEFI firmware does not mess with the boot order, you should now be greeted by <b>systemd-boot</b>, with an option to boot into whichever version of Windows you have installed, as well as NixOS, which will be the <u>default</u> boot option. </p>
+
+<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Systemd-boot.webp">
+
+<p> You can boot into Windows to see if is working, but it should not be necessary. If you do, however, remember to restart your computer instead of shutting it down, to allow for the final modification of partitions on the system that will be needed to increase the site of the boot partition. </p>
+<p> Once you have booted into NixOS, logged in, and configured what you need (peripherals if needed, network…), we will be able to continue. </p>
+
+<hr>
+
+<h2> [3.2] Backing up the current boot files. </h2>
+
+<p> This is necessary because we will delete the boot partition to make it larger. Let us start. To make things desktop-independant and more universal, we will do most of the rest of the guide in a terminal emulator, but fear not, as always, you will be guided through. I also made it so most commands output verbosely, which means they will actually try to output what they are doing.</p>
+
+<ol>
+	<li> Open a terminal emulator of your choice. In my kase, it will be KDE's Konsole. <sub><i>(get it? kase? case? KDE? …)</i></sub></li>
+	<li> Create a temporary directory to back the boot files to. Do so with this command: <b><pre>mkdir -v /tmp/backup</pre></b> This should be the output: <b><pre style = "color: #00ff00;">mkdir: created directory '/tmp/backup'<pre></b></li>
+	<p />
+	<li> Go into a root shell with this command: <b><pre>sudo -i</pre></b></li> You should now have this shell prompt: <b><pre style = "color: #00ff00;">[root@nixos:~]#</pre></b>
+	<p />
+	<li> Back up the boot files into the newly created directory. Do so with this command: <b><pre>cp -vr /boot/* /tmp/backup/</pre></b> You should see a bunch of lines on the terminal emulator, showing every file that has been copied. </li>
+	<p />
+	<li> The final step before modifying the boot partition is to unmount it from the running system, to make it available. Do so with this command: <b><pre>umount -v /boot</pre></b> This should be the output: <b><pre style = "color: #00ff00;">umount: /boot unmounted</pre></b></li>
+	<p />
+	<li> You can now exit from the root shell with the <b style = "color: #00ff00;">exit</b> command. </li>
+</ol>
+
+<hr>
+
+<h2> [3.3] Resizing partitions with Gparted. </h2>
+
+<p> We will install and run <b>Gparted</b> to easily and graphically modify the needed partitions. We also need <b>ntfs3g</b> as a depedency, to give Gparted the ability to modify NTFS partitions. Then, we will edit the partitions that needs it. Once again, follow these steps. </p>
+
+<ol>
+	<li> <i>Temporarily</i> install <b>Gparted</b> and <b>ntfs3g</b>, and run Gparted. Do so with the following command: <b><pre>nix-shell -p gparted -p ntfs3g --run "sudo gparted"</pre></b> Gparted will launch and show you the current partition layout: </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_1.webp">
+	<p />
+	<li> Right-click on the partition named "<b>Basic data partition</b>", then click on "<b>Resize/Move</b>": </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_2.webp">
+	<p />
+	<li> On the window that appears, in "<b>Free space preceeding (MiB)</b>", we need to put the amount of space we will want to add to the boot partition. In my case, just to be on the extra-safe side, I will add 1 GiB <i>(1024 MiB)</i>.</li>
+	<li>Once completed, click on "<b>Resize/Move</b>", and safely ignore the warning by clicking on "<b>OK</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_3.webp">
+	<p />
+	<li> Right-click on the partition named "<b>Microsoft reserved partition</b>", then click on "<b>Resize/Move</b>": </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_4.webp">
+	<p />
+	<li> On the window that appears, in "<b>Free space following (MiB)</b>", we need to lower the amount to 0, which will move the partition to the right, allowing us to create a large, unified boot partition in the following steps.</li>
+	<li> Once completed, click on "<b>Resize/Move</b>", and safely ignore the warning by clicking on "<b>OK</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_5.webp">
+	<p />
+	<li> Right-click on the partition named "<b>EFI system partition</b>", then click on "<b>Delete</b>": </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_6.webp">
+	<p />
+	<li> This will leave an "<b>unallocated</b>" partition in its place, which combined with the space we previously freed from the <b>Basic data partition</b>. We can now create the new, larger boot partition. To do so, right-click on the <b>new unallocated</b> partition, then click on "<b>New</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_7.webp">
+	<p />
+	<li> On the window that appears, in "<b>Partition name</b>", put in <u>exactly</u> the following name: <b style = "color: #00ff00;">EFI System Partition</b>. </li>
+	<li> In "<b>File system</b>", select <b>fat32</b>, then click on "<b>Add</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_8.webp">
+	<p />
+	<li> The partitioning steps are now complete, though there are still some things to be done. Once you have reviewed the changes, press on the checkmark icon, then "<b>Apply</b>" on the window that appears. <b>The operation <u>will</u> take a while to complete</b>, depending on how much data has to be moved. </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_9.webp">
+	<p />
+	<li> Once the operation has completed, click on "<b>Close</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_10.webp">
+	<p />
+	<li> We now need to add the necessary flags to the newly created fat32 partition, to allow it to work properly. Right-click on it, then click on "<b>Manage Flags</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_11.webp">
+	<p />
+	<li> On the window that appears, click on "<b>esp</b>" and on "<b>no_automount</b>", then click on "<b>Close</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_12.webp">
+	<p />
+	<li> Now that we have modified this partition, its <b>UUID</b> has changed. We need to gather it, since we will need to update it in a nix configuration file. Right-click on the same partition again, then click on "<b>Information</b>". </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_13.webp">
+	<p />
+	<li> You may now copy the UUID somewhere for later use. In my case, I copied <b>2C40-6274</b> in my clipboard. </li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/Gparted_14.webp">
+	<p />
+	<li> Once you have copied the UUID, click on "<b>Close</b>". </li>
+	<li> You can now close Gparted and go back to your terminal emulator of choice. </li>
+</ol>
+
+<hr>
+
+<h2> [3.4] Updating the boot UUID. </h2>
+
+<p> Now that we have copied the new boot partition's UUID, we need to modify the <b>/etc/nixos/hardware-configuration.nix</b> file; Something that should otherwise not be done in most situations. Go back to your terminal emulator of choice. </p>
+
+<ol>
+	<li> The <b>GNU nano</b> text editor is pre-installed on NixOS. If you know how to use, ignore this step. If you want to use another text editor, you may use the following command, replacing <b>micro</b> with your terminal-based text editor of choice: <b><pre>nix-shell -p micro</pre></b></li>
+	<li> Open the <b>/etc/nixos/hardware-configuration.nix</b> file with your text editor of choice. Make sure it can save with superuser rights, or launch it with sudo. Replace <b>micro</b> with your terminal-based text editor of choice: <b><pre>micro /etc/nixos/hardware-configuration.nix</pre></b></li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/UUID_1.webp">
+	<p />
+	<li> Replace the old UUID of the <b>"/boot"</b> partition in the file with the one you have copied from Gparted.</li>
+	<img src = "file:///User/Atemo/Documents/Web/Tests/Images/UUID_2.webp">
+	<p />
+	<li> After you have done so, save the file and close the text editor. If you are using GNU nano, you can save the file by pressing <b>Ctrl+s</b>, then close by pressing <b>Ctrl+k</b>. Keep your terminal emulator opened. </li>
+</ol>
+
+<hr>
+
+<h2> [3.5] Restoring the boot files to the new boot partition. </h2>
+
+<p> We can now copy the backed-up boot files back into the newly created boot partition, we will do so in a terminal emulator: </p>
+
+<ol>
+	<li> Mount the new boot partition back onto <b>/boot</b> with the following command, replacing <b>/dev/sda1</b> if the partition name is different on your system: <b><pre>sudo mount -vo umask=077 /dev/sda1 /boot</pre></b> This should be the output: <b><pre style = "color: #00ff00;">mount: /dev/sda1 mounted on /boot.</pre></b></li>
+	<li> Go into a root shell with this command: <b><pre>sudo -i</pre></b></li> You should now have this shell prompt: <b><pre style = "color: #00ff00;">[root@nixos:~]#</pre></b>
+	<li> Copy the backed-up  boot files into the mounted /boot directory. Do so with this command: <b><pre>cp -vr /tmp/backup/* /boot/</pre></b> You should see a bunch of lines on the terminal emulator, showing every file that has been copied. </li>
+	<li> You can now exit from the root shell with the <b style = "color: #00ff00;">exit</b> command. </li>
+</ol>
+
+<hr>
+
+<h2> [3.6] Final: Updating the NixOS configuration. </h2>
+
+<p> Everything is done! We now have to update the NixOS configuration. In the terminal emulator of your choice, run this command: <b><pre>sudo nixos-rebuild boot</pre></b> </p>
+<p> You should see the output of the system being built. You can now reboot your system, and… There you go! You now have a stable and hopefully safe dual-boot of Windows and NixOS, on the same drive. </p>
+<p> Note that the very first generation of NixOS will be unbootable, since it uses the older version of <b>/etc/nixos/hardware-configuration.nix</b>, but the current <i>(2)</i> and any future generation will boot just fine. Once you boot back into Windows, you will be able to power it off manually once again, since no partition changes will be necessary anymore. </p>
+
+<hr> <hr>
+
+<h1 style = "text-align: center; color: #ff8000"> Enjoy your system! 🦊 </h1>
