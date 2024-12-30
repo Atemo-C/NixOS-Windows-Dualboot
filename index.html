@@ -44,7 +44,7 @@
 <h1> Introduction. </h1>
 
 <p> Greetings. In this guide, I will show you one of the few ways to install NixOS graphically alongside an existing EFI installation of Windows 10 or Windows 11, on the same storage device. </p>
-<p> Whilst it is not someting I would usually recommend doing since there are better ways to install different operating systems on one's computer, some people may simply not have a choice, or may find this to be more convenient. And, after having helped a few people with thtis exact thing, I feel it is a good opportunity to share this knowledge and help others. </p>
+<p> While it is not something I would usually recommend doing since there are better ways to install different operating systems on one's computer, some people may simply not have a choice, or may find this to be more convenient. And, after having helped a few people with this exact thing, I feel it is a good opportunity to share this knowledge and help others. </p>
 <p> This guide is very step-by-step, and includes images for every important step as well. Feel free to read it multiple times over if needed, and if you can, try it out on a virtual machine before doing it on actual hardware. </p>
 
 <hr>
@@ -55,7 +55,7 @@
 
 <ul>
 	<li> Your computer boots in <b>EFI mode</b>. </li>
-	<li> Your comupter has a <b>64-bit x86_64</b> CPU architecture.</li>
+	<li> Your computer has a <b>64-bit x86_64</b> CPU architecture.</li>
 	<li> Windows <b>10</b> <i>or</i> <b>11</b> is already installed and working. </li>
 	<li> Disk partitioning has not already been changed outside of Windows' defaults. </li>
 	<li> Windows is the <b>only</b> operating system installed on your computer. </li>
@@ -65,8 +65,8 @@
 	<li> You have an <b>up-to-date</b> NixOS installation medium, and a Windows one if necessary. </li>
 	<li> Said installation medium of NixOS is a graphical one <i>(<a href="https://channels.nixos.org/nixos-24.11/latest-nixos-gnome-x86_64-linux.iso"><span style="color: #00c0ff;">GNOME</span></a> or <a href="https://channels.nixos.org/nixos-24.11/latest-nixos-plasma6-x86_64-linux.iso"><span style="color: #00c0ff;">KDE Plasma</span></a>)</i>. </li>
 	<li> You know how to boot into said installation medium. </li>
-	<li> You will install NixOS with a graphical desktop environments. </li>
-	<li> Things could go wrong, and you are fully prepared for that possiblity. </li>
+	<li> You will install NixOS with a graphical desktop environment. </li>
+	<li> Things could go wrong, and you are fully prepared for that possibility. </li>
 </ul>
 
 <p> With that aside, we can now begin. </p>
@@ -134,13 +134,13 @@
 
 <h2> [2.1] Booting into NixOS. </h2>
 
-<p> To boot into NixOS and stop Windows from interfering with further partition changes, we will need not to shut down the computer, but restart it. <p>
+<p> To boot into NixOS and stop Windows from interfering with further partition changes, we will need not shut down the computer, but restart it. <p>
 <p> To do so, insert the NixOS installation medium into your computer, then restart it. Once the NixOS boot menu appears, press <b>Enter</b> at the default selection, which should be "<b><span style = "color: #00c0ff">&nbsp NixOS [version] Installer</span></b>", as seen here: </p>
 
 <img src = "Images/First-boot.webp">
 
 <p> The system will now boot. A few seconds after the desktop has started, the installer program should automatically start. </p>
-<p> Before proceeding to the intsallation, your computer will need to be connected to a stable network and have a stable power source. You may or may not have to re-start the installer program, <b>Calamares</b>, if some changed settings are not automatically detected after the automatic 5-seconds refresh on failed elements. </p>
+<p> Before proceeding to the installation, your computer will need to be connected to a stable network and have a stable power source. You may or may not have to re-start the installer program, <b>Calamares</b>, if some changed settings are not automatically detected after the automatic 5-seconds refresh on failed elements. </p>
 <p> Once this is done, the installer window will look like this, prompting you to select the language you wish to proceed with: </p>
 
 <img src = "Images/NixOS-installer_1.webp">
@@ -181,7 +181,7 @@
 <p> We can now proceed to the partitioning. </p>
 
 <ol>
-	<li> We are presented multiple choices. For this guide, we will choose the "<b>Manual partitioning</b>" option. Select it, then click "<b>Next</b>". After we clicked it, we are shown the entire partitioning table. This is where we will asign partitions for the installation of NixOS. </li>
+	<li> We are presented multiple choices. For this guide, we will choose the "<b>Manual partitioning</b>" option. Select it, then click "<b>Next</b>". After we clicked it, we are shown the entire partitioning table. This is where we will assign partitions for the installation of NixOS. </li>
 	<img src = "Images/NixOS-installer_7.webp">
 	<p />
 	<li> Click on the "<b>FAT32</b>" partition of 100MiB, then click "<b>Edit</b>". A new window will appear. </li>
@@ -214,7 +214,7 @@
 	<li> Once you are absolutely sure that everything is in check, you may finally click "<b>Install</b>" There is NO going back from here on out. <i> Note: If the installer looks stuck at <b>46%</b>, this is perfectly normal. This step simply takes the longest out of the entire installation process. </i> </li>
 </ol>
 
-<p> Once the installation has finished, you should show this screen. </p>
+<p> Once the installation has finished, you should see this screen. </p>
 
 <img src = "Images/NixOS-installer_14.webp">
 
@@ -230,14 +230,14 @@
 
 <img src = "Images/Systemd-boot.webp">
 
-<p> You can boot into Windows to see if is working, but it should not be necessary. If you do, however, remember to restart your computer instead of shutting it down, to allow for the final modification of partitions on the system that will be needed to increase the site of the boot partition. </p>
+<p> You can boot into Windows to see if it is working, but it should not be necessary. If you do, however, remember to restart your computer instead of shutting it down, to allow for the final modification of partitions on the system that will be needed to increase the site of the boot partition. </p>
 <p> Once you have booted into NixOS, logged in, and configured what you need (peripherals if needed, network…), we will be able to continue. </p>
 
 <hr>
 
 <h2> [3.2] Backing up the current boot files. </h2>
 
-<p> This is necessary because we will delete the boot partition to make it larger. Let us start. To make things desktop-independant and more universal, we will do most of the rest of the guide in a terminal emulator, but fear not, as always, you will be guided through. I also made it so most commands output verbosely, which means they will actually try to output what they are doing.</p>
+<p> This is necessary because we will delete the boot partition to make it larger. Let us start. To make things desktop-independent and more universal, we will do most of the rest of the guide in a terminal emulator, but fear not, as always, you will be guided through. I also made it so most commands output verbosely, which means they will actually try to output what they are doing.</p>
 
 <ol>
 	<li> Open a terminal emulator of your choice. In my kase, it will be KDE's Konsole. <sub><i>(get it? kase? case? KDE? …)</i></sub></li>
@@ -256,7 +256,7 @@
 
 <h2> [3.3] Resizing partitions with Gparted. </h2>
 
-<p> We will install and run <b>Gparted</b> to easily and graphically modify the needed partitions. We also need <b>ntfs3g</b> as a depedency, to give Gparted the ability to modify NTFS partitions. Then, we will edit the partitions that needs it. Once again, follow these steps. </p>
+<p> We will install and run <b>Gparted</b> to easily and graphically modify the needed partitions. We also need <b>ntfs3g</b> as a depedency, to give Gparted the ability to modify NTFS partitions. Then, we will edit the partitions that need it. Once again, follow these steps. </p>
 
 <ol>
 	<li> <i>Temporarily</i> install <b>Gparted</b> and <b>ntfs3g</b>, and run Gparted. Do so with the following command: <b><pre>nix-shell -p gparted -p ntfs3g --run "sudo gparted"</pre></b> Gparted will launch and show you the current partition layout: </li>
@@ -265,7 +265,7 @@
 	<li> Right-click on the partition named "<b>Basic data partition</b>", then click on "<b>Resize/Move</b>": </li>
 	<img src = "Images/Gparted_2.webp">
 	<p />
-	<li> On the window that appears, in "<b>Free space preceeding (MiB)</b>", we need to put the amount of space we will want to add to the boot partition. In my case, just to be on the extra-safe side, I will add 1 GiB <i>(1024 MiB)</i>.</li>
+	<li> On the window that appears, in "<b>Free space preceding (MiB)</b>", we need to put the amount of space we will want to add to the boot partition. In my case, just to be on the extra-safe side, I will add 1 GiB <i>(1024 MiB)</i>.</li>
 	<li>Once completed, click on "<b>Resize/Move</b>", and safely ignore the warning by clicking on "<b>OK</b>". </li>
 	<img src = "Images/Gparted_3.webp">
 	<p />
