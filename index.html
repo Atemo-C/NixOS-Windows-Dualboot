@@ -73,7 +73,7 @@
 <h2> [1.1] Opening Disk Management. </h2>
 <p> Turn your computer on, and boot into Windows. Once you have logged into the desktop, open the search menu, and search for "partition". The following program should be displayed, start it: </p>
 
-<img src = "/Images/Partition-search.webp">
+<img src = "../Images/Partition-search.webp">
 
 <p> If you cannot find it here, you can find it in the <b>Control Panel</b> like so: </p>
 
@@ -84,13 +84,13 @@
 	<li>Click on "<b><span style = "color: #00c0ff">Create and format hard disk partitions</span></b>". </li>
 </ol>
 
-<img src = "/Images/Control-panel_1.webp">
+<img src = "../Images/Control-panel_1.webp">
 <p />
-<img src = "/Images/Control-panel_2.webp">
+<img src = "../Images/Control-panel_2.webp">
 
 <p> You should now have this window opened: </p>
 
-<img src = "/Images/Disk-management_1.webp">
+<img src = "../Images/Disk-management_1.webp">
 
 <p> Here, we can see a normal Windows partitioning layout, with: </p>
 
@@ -109,14 +109,14 @@
 
 <ol>
 	<li>Right-click on the main NTFS partition. </li>
-	<img src = "/Images/Disk-management_2.webp">
+	<img src = "../Images/Disk-management_2.webp">
 	<p />
 	<li>Click on "<b>Shrink Volume…</b>"; This window should appear: </li>
-	<img src = "/Images/Disk-management_3.webp">
+	<img src = "../Images/Disk-management_3.webp">
 	<p />
 	<li>In "<b>Enter the amount of space to shrink in MB</b>", do so. Select an amount that will leave enough space for a NixOS installation, but also enough for Windows to keep working normally. In this case, I chose half of the total size.</li>
 	<li>Click on "<b>Shrink</b>". You should now have a black-bannered unallocated partition, ready for NixOS to be installed in. </li>
-	<img src = "/Images/Disk-management_4.webp">
+	<img src = "../Images/Disk-management_4.webp">
 	<p />
 </ol>
 
@@ -133,13 +133,13 @@
 <p> To boot into NixOS and stop Windows from interfering with further partition changes, we will need not to shut down the computer, but restart it. <p>
 <p> To do so, insert the NixOS installation medium into your computer, then restart it. Once the NixOS boot menu appears, press <b>Enter</b> at the default selection, which should be "<b><span style = "color: #00c0ff">&nbsp NixOS [version] Installer</span></b>", as seen here: </p>
 
-<img src = "/Images/First-boot.webp">
+<img src = "../Images/First-boot.webp">
 
 <p> The system will now boot. A few seconds after the desktop has started, the installer program should automatically start. </p>
 <p> Before proceeding to the intsallation, your computer will need to be connected to a stable network and have a stable power source. You may or may not have to re-start the installer program, <b>Calamares</b>, if some changed settings are not automatically detected after the automatic 5-seconds refresh on failed elements. </p>
 <p> Once this is done, the installer window will look like this, prompting you to select the language you wish to proceed with: </p>
 
-<img src = "/Images/NixOS-installer_1.webp">
+<img src = "../Images/NixOS-installer_1.webp">
 
 <p> From here on until the "<b><span style = "color:#00c0ff;">Partitions</span></b>" portion of the installer, steps are mostly similar to most other Linux desktop installers. For those who are sure to be familiar with it and NixOS' unique features in it, you may skip to "<b><span style = "color: #00ffc0;">[2.3] NixOS partitioning and installation.</span></b>" of this guide. For the rest of you, follow along. </p>
 
@@ -153,16 +153,16 @@
 	<li> <span style = "color: #00c0ff"> [ Welcome ]</span> | As seen in the previous image, select the desired language, and click "<b>Next</b>". </li>
 	<p />
 	<li> <span style = "color: #00c0ff"> [ Location ]</span> | Select the desired region and time zone. If desired, you may as well individually change the language and locales here too. Once done, click "<b>Next</b>". </li>
-	<img src = "/Images/NixOS-installer_2.webp">
+	<img src = "../Images/NixOS-installer_2.webp">
 	<p />
 	<li> <span style = "color: #00c0ff"> [ Users ]</span> | Select a user name and password, as well as a root (admin) account password, then click "<b>Next</b>". </li>
-	<img src = "/Images/NixOS-installer_3.webp">
+	<img src = "../Images/NixOS-installer_3.webp">
 	<p />
 	<li> <span style = "color: #00c0ff"> [ Desktop ]</span> | Select a graphical desktop to install, then click "<b>Next</b>". </li>
-	<img src = "/Images/NixOS-installer_4.webp">
+	<img src = "../Images/NixOS-installer_4.webp">
 	<p />
 	<li> <span style = "color: #00c0ff"> [ Unfree Software ]</span> | Select whether to allow proprietary software to be installed. The text provided by the installer does a good job at explaining what it means. Once you have made your choice, click "<b>Next</b>"</li>
-	<img src = "/Images/NixOS-installer_5.webp">
+	<img src = "../Images/NixOS-installer_5.webp">
 	<p />
 </ol>
 
@@ -172,47 +172,47 @@
 
 <p> You should now see this screen, which shows the partition layout, just as it was when we last modified it on Windows: </p>
 
-<img src = "/Images/NixOS-installer_6.webp">
+<img src = "../Images/NixOS-installer_6.webp">
 
 <p> We can now proceed to the partitioning. </p>
 
 <ol>
 	<li> We are presented multiple choices. For this guide, we will choose the "<b>Manual partitioning</b>" option. Select it, then click "<b>Next</b>". After we clicked it, we are shown the entire partitioning table. This is where we will asign partitions for the installation of NixOS. </li>
-	<img src = "/Images/NixOS-installer_7.webp">
+	<img src = "../Images/NixOS-installer_7.webp">
 	<p />
 	<li> Click on the "<b>FAT32</b>" partition of 100MiB, then click "<b>Edit</b>". A new window will appear. </li>
 	<li> In "<b>Mount Point</b>", select <b>/boot</b>, it should look like this: </li>
-	<img src = "/Images/NixOS-installer_8.webp">
+	<img src = "../Images/NixOS-installer_8.webp">
 	<p />
 	<li> Click on "<b>OK</b>" once you have verified your actions. </li>
 	<li> Click on the largest "<b>Free Space"</b>, then click "<b>Create"</b>. A new window will appear. </li>
 	<li> In "<b>Size</b>", put the amount, in MiB, of swap we want to give NixOS. In my case, I will go with 4 GiB <i>(4096 MiB)</i>. </li>
 	<li> In "<b>File System</b>", select "<b>linuxswap</b>".</li>
 	<li> In "<b>FS Label</b>", you may name the swap partition for NixOS. In my case, I will name it "nixos-swap". Once you have completed these steps, the window should look like this:</li>
-	<img src = "/Images/NixOS-installer_9.webp">
+	<img src = "../Images/NixOS-installer_9.webp">
 	<p />
 	<li> Click on "<b>OK</b>" once you have verified your actions. A small red partition should now appear, showing the successful addition of the swap partition. </li>
 	<li> Click once again on the largest "<b>Free Space"</b>, then click "<b>Create"</b>. A new window will appear. </li>
 	<li> You may wish to change the file system from ext4 to something else if you wish, but in this case, I will stay with ext4. </li>
 	<li> In "<b>Mount Point</b>", select <b>/</b>. </li>
 	<li> In "<b>FS Label</b>", you may name the main storage partition for NixOS. In my case, I will name it "nixos". Once you have completed these steps, the window should look like this:</li>
-	<img src = "/Images/NixOS-installer_10.webp">
+	<img src = "../Images/NixOS-installer_10.webp">
 	<p />
 	<li> Click on "<b>OK</b>" once you have verified your actions. You should now have a completed partition table, like so: </li>
-	<img src = "/Images/NixOS-installer_11.webp">
+	<img src = "../Images/NixOS-installer_11.webp">
 	<p />
 	<li> Click on "<b>Next</b>". The following warning should show up, indicating that the boot partition of 100 MiB is too small. We will fix this after the installation. </li>
-	<img src = "/Images/NixOS-installer_12.webp">
+	<img src = "../Images/NixOS-installer_12.webp">
 	<p />
 	<li> Click on "<b>OK</b>", then review your choices on this screen: </li>
-	<img src = "/Images/NixOS-installer_13.webp">
+	<img src = "../Images/NixOS-installer_13.webp">
 	<p />
 	<li> Once you are absolutely sure that everything is in check, you may finally click "<b>Install</b>" There is NO going back from here on out. <i> Note: If the installer looks stuck at <b>46%</b>, this is perfectly normal. This step simply takes the longest out of the entire installation process. </i> </li>
 </ol>
 
 <p> Once the installation has finished, you should show this screen. </p>
 
-<img src = "/Images/NixOS-installer_14.webp">
+<img src = "../Images/NixOS-installer_14.webp">
 
 <p> You may now power off the computer and remove the NixOS installation medium from it. </p>
 
@@ -224,7 +224,7 @@
 
 <p> You can now boot your computer. Assuming your UEFI firmware does not mess with the boot order, you should now be greeted by <b>systemd-boot</b>, with an option to boot into whichever version of Windows you have installed, as well as NixOS, which will be the <u>default</u> boot option. </p>
 
-<img src = "/Images/Systemd-boot.webp">
+<img src = "../Images/Systemd-boot.webp">
 
 <p> You can boot into Windows to see if is working, but it should not be necessary. If you do, however, remember to restart your computer instead of shutting it down, to allow for the final modification of partitions on the system that will be needed to increase the site of the boot partition. </p>
 <p> Once you have booted into NixOS, logged in, and configured what you need (peripherals if needed, network…), we will be able to continue. </p>
@@ -256,49 +256,49 @@
 
 <ol>
 	<li> <i>Temporarily</i> install <b>Gparted</b> and <b>ntfs3g</b>, and run Gparted. Do so with the following command: <b><pre>nix-shell -p gparted -p ntfs3g --run "sudo gparted"</pre></b> Gparted will launch and show you the current partition layout: </li>
-	<img src = "/Images/Gparted_1.webp">
+	<img src = "../Images/Gparted_1.webp">
 	<p />
 	<li> Right-click on the partition named "<b>Basic data partition</b>", then click on "<b>Resize/Move</b>": </li>
-	<img src = "/Images/Gparted_2.webp">
+	<img src = "../Images/Gparted_2.webp">
 	<p />
 	<li> On the window that appears, in "<b>Free space preceeding (MiB)</b>", we need to put the amount of space we will want to add to the boot partition. In my case, just to be on the extra-safe side, I will add 1 GiB <i>(1024 MiB)</i>.</li>
 	<li>Once completed, click on "<b>Resize/Move</b>", and safely ignore the warning by clicking on "<b>OK</b>". </li>
-	<img src = "/Images/Gparted_3.webp">
+	<img src = "../Images/Gparted_3.webp">
 	<p />
 	<li> Right-click on the partition named "<b>Microsoft reserved partition</b>", then click on "<b>Resize/Move</b>": </li>
-	<img src = "/Images/Gparted_4.webp">
+	<img src = "../Images/Gparted_4.webp">
 	<p />
 	<li> On the window that appears, in "<b>Free space following (MiB)</b>", we need to lower the amount to 0, which will move the partition to the right, allowing us to create a large, unified boot partition in the following steps.</li>
 	<li> Once completed, click on "<b>Resize/Move</b>", and safely ignore the warning by clicking on "<b>OK</b>". </li>
-	<img src = "/Images/Gparted_5.webp">
+	<img src = "../Images/Gparted_5.webp">
 	<p />
 	<li> Right-click on the partition named "<b>EFI system partition</b>", then click on "<b>Delete</b>": </li>
-	<img src = "/Images/Gparted_6.webp">
+	<img src = "../Images/Gparted_6.webp">
 	<p />
 	<li> This will leave an "<b>unallocated</b>" partition in its place, which combined with the space we previously freed from the <b>Basic data partition</b>. We can now create the new, larger boot partition. To do so, right-click on the <b>new unallocated</b> partition, then click on "<b>New</b>". </li>
-	<img src = "/Images/Gparted_7.webp">
+	<img src = "../Images/Gparted_7.webp">
 	<p />
 	<li> On the window that appears, in "<b>Partition name</b>", put in <u>exactly</u> the following name: <b style = "color: #00ff00;">EFI System Partition</b>. </li>
 	<li> In "<b>File system</b>", select <b>fat32</b>, then click on "<b>Add</b>". </li>
-	<img src = "/Images/Gparted_8.webp">
+	<img src = "../Images/Gparted_8.webp">
 	<p />
 	<li> The partitioning steps are now complete, though there are still some things to be done. Once you have reviewed the changes, press on the checkmark icon, then "<b>Apply</b>" on the window that appears. <b>The operation <u>will</u> take a while to complete</b>, depending on how much data has to be moved. </li>
-	<img src = "/Images/Gparted_9.webp">
+	<img src = "../Images/Gparted_9.webp">
 	<p />
 	<li> Once the operation has completed, click on "<b>Close</b>". </li>
-	<img src = "/Images/Gparted_10.webp">
+	<img src = "../Images/Gparted_10.webp">
 	<p />
 	<li> We now need to add the necessary flags to the newly created fat32 partition, to allow it to work properly. Right-click on it, then click on "<b>Manage Flags</b>". </li>
-	<img src = "/Images/Gparted_11.webp">
+	<img src = "../Images/Gparted_11.webp">
 	<p />
 	<li> On the window that appears, click on "<b>esp</b>" and on "<b>no_automount</b>", then click on "<b>Close</b>". </li>
-	<img src = "/Images/Gparted_12.webp">
+	<img src = "../Images/Gparted_12.webp">
 	<p />
 	<li> Now that we have modified this partition, its <b>UUID</b> has changed. We need to gather it, since we will need to update it in a nix configuration file. Right-click on the same partition again, then click on "<b>Information</b>". </li>
-	<img src = "/Images/Gparted_13.webp">
+	<img src = "../Images/Gparted_13.webp">
 	<p />
 	<li> You may now copy the UUID somewhere for later use. In my case, I copied <b>2C40-6274</b> in my clipboard. </li>
-	<img src = "/Images/Gparted_14.webp">
+	<img src = "../Images/Gparted_14.webp">
 	<p />
 	<li> Once you have copied the UUID, click on "<b>Close</b>". </li>
 	<li> You can now close Gparted and go back to your terminal emulator of choice. </li>
@@ -313,10 +313,10 @@
 <ol>
 	<li> The <b>GNU nano</b> text editor is pre-installed on NixOS. If you know how to use, ignore this step. If you want to use another text editor, you may use the following command, replacing <b>micro</b> with your terminal-based text editor of choice: <b><pre>nix-shell -p micro</pre></b></li>
 	<li> Open the <b>/etc/nixos/hardware-configuration.nix</b> file with your text editor of choice. Make sure it can save with superuser rights, or launch it with sudo. Replace <b>micro</b> with your terminal-based text editor of choice: <b><pre>micro /etc/nixos/hardware-configuration.nix</pre></b></li>
-	<img src = "/Images/UUID_1.webp">
+	<img src = "../Images/UUID_1.webp">
 	<p />
 	<li> Replace the old UUID of the <b>"/boot"</b> partition in the file with the one you have copied from Gparted.</li>
-	<img src = "/Images/UUID_2.webp">
+	<img src = "../Images/UUID_2.webp">
 	<p />
 	<li> After you have done so, save the file and close the text editor. If you are using GNU nano, you can save the file by pressing <b>Ctrl+s</b>, then close by pressing <b>Ctrl+k</b>. Keep your terminal emulator opened. </li>
 </ol>
